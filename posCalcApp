@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace posCalcApp2018a2_proj
+{
+    public partial class salesForm : Form
+    {
+        // Declare global variables and constants:
+        decimal TAX_RATE = 0.08m;
+        string ERROR_MESSAGE = "Bad data; please correct your inputs and try again.";
+        //string RESULT_PREFIX = "The total price for this order is ";
+        int intCurrentItem;
+        int intStart = 12;
+        int intIncrement = 12;
+        int intNumItems = 9;
+        public salesForm()
+        {
+            InitializeComponent();
+            //int intItemsCount = quantityList.Items.Count;
+            quantityList.Items.Clear();
+            //for (int i = 0; i<=intItemsCount; i++)
+            //{
+                //object selectedItem = quantityList.SelectedItem;
+                //quantityList.Items.Remove(selectedItem);
+                //quantityList.Items.Remove(quantityList.SelectedItem);
+            //}
+            quantityList.Items.Add("Select . . .");
+            quantityList.Items.Add(intStart.ToString());
+            //for (int i = 1; i<= intNumItems; i++)
+            //{
+                //intCurrentItem = i * intIncrement + intStart;
+                //      24         1 * 12           + 12
+                //quantityList.Items.Add(intCurrentItem.ToString());
+            //}
+            int k = 1; //Priming read
+            while (k <= intNumItems)
+            {
+                intCurrentItem = k * intIncrement + intStart;
+                quantityList.Items.Add(intCurrentItem.ToString());
+                k++; //must include condition that will change while loop, or else infinite loop
+            }
+            quantityList.SelectedIndex = 0;
+            quantityList.Select();
+        }
+
+        private void calcButton_Click(object sender, EventArgs e)
+        {
+            // Declare local variables:
+            bool blnPriceOK = true;
+            bool blnQuantOK = true;
+            bool blnTaxable = true;
+            string strQuantity, strPrice, strTotal, strResult, strDiscountRate, strDiscount, strTax;
+            int intQuantity;
+            decimal decPrice, decTotal, decTaxRate, decDiscountRate, decDiscount, decTax;
+            // Get inputs as string:
+            strQuantity = quantityList.Text;
+            strPrice = priceBox.Text;
+            blnTaxable = nonResidentBox.Checked;
+            // Convert string to numeric:
+            blnQuantOK = int.TryParse(strQuantity, out intQuantity);
+            blnPriceOK = decimal.TryParse(strPrice, out decPrice);
+            //int.TryParse(strQuantity, out intQuantity);
+            //decimal.TryParse(strPrice, out decPrice);
+            // Calculate the pre-tax cost of items and include Discount:
+            if (intQuantity >= 30 && intQuantity < 60)
+            {
+                decDiscountRate = 0.10m;
+            }
+            else if (intQuantity >= 60 && intQuantity < 90)
+            {
+                decDiscountRate = 0.15m;
+            }
+            else if (intQuantity >= 90 && intQuantity < 120)
+            {
+                decDiscountRate = 0.20m;
+            }
+            else if (intQuantity >= 120)
+            {
+                 decDiscountRate = 0.25m;
+            }
+            else
+            {
+                decDiscountRate = 0.0m;
+            }
+            decTotal = intQuantity * decPrice;
+            decDiscount = decTotal * decDiscountRate;
+            decTotal = decTotal - decDiscount;
+            // Calculate the tax and total of items:
+            //if(blnTaxable == false)
+            //{
+            //    decTaxRate = TAX_RATE;
+            //}
+            //else
+            //{
+            //    decTaxRate = 0m;
+            //}
+            decTaxRate = (blnTaxable == false) ? TAX_RATE : 0M;
+            decTax = decTaxRate * decTotal;
+            decTotal = decTax + decTotal;
+            // Convert to string and display output to resultLabel:
+            //resultLabel.Visible = false;
+            //if (blnPriceOK == true && blnQuantOK == true)
+            if (blnQuantOK == true && blnPriceOK == true)
+            {
+                strTotal = decTotal.ToString("c2");
+                strDiscountRate = decDiscountRate.ToString("p0");
+                strDiscount = decDiscount.ToString("c2");
+                strTax = decTax.ToString("c2");
+                strPrice = decPrice.ToString("c2");
+                strResult = "Your total price for this order of " + strQuantity + " units at " 
+                    + strPrice + " each amounts to " + strTotal + ", which reflects a " + strDiscountRate
+                    + " quantity discount of " + strDiscount + " and includes sales tax of " + strTax + ".";
+                resultLabel.Text = strResult;
+                //totalLabel.Text = RESULT_PREFIX + strTotal;
+            }
+            else
+            {
+                resultLabel.Text = ERROR_MESSAGE;
+            }
+            //if (blnQuantOK == true)
+            //{
+               // strTotal = decTotal.ToString("c2");
+                //totalLabel.Text = RESULT_PREFIX + strTotal;
+            //}
+            //else
+            //{
+                //resultLabel.Text = ERROR_MESSAGE;
+            //}
+            // Reset the form:
+            quantityList.Focus();
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            priceBox.Text = "Enter price/unit. . .";
+            resultLabel.Text = "Total goes here. . .";
+            nonResidentBox.Checked = false;
+            quantityList.SelectedIndex = 0;
+
+        }
+    }
+}
