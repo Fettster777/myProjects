@@ -1,0 +1,161 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace fkAutoApp2018a1_proj
+{
+
+    public partial class SalesForm : Form
+    {
+        //Declare global variables and constants:
+        private const int DEFAULT_STATE = 5;
+        private const string ERR_MESSAGE = "Missing or non-numeric sale amount; please verify and retry"; 
+        private const string ERR_TITLE = "Error!";
+        private readonly string[] STATE = { "AR", "LA", "MO", "MS", "OK", "TN", "TX" };
+        private readonly decimal[] TAX_RATE = { 0.10m, 0.06m, 0.08m, 0.055m, 0.065m, 0.085m, 0.05m };
+        private readonly decimal[] BRACKET = { 500m, 2000m, 5000m, 999999m };
+        private readonly decimal[] DISCOUNT_RATE = { 0.0m, 0.1m, 0.2m, 0.3m };
+        private string strName;
+
+        public SalesForm()
+        {
+            InitializeComponent();
+        }
+        private void SalesForm_Load(object sender, EventArgs e)
+        {
+            discountLabel.Text = String.Empty;
+            taxLabel.Text = String.Empty;
+            netPriceLabel.Text = String.Empty;
+            resultSummaryLabel.Text = String.Empty;
+            //Populate the drop down list:
+            foreach (string state in STATE)
+            {
+            stateListBox.Items.Add(state);
+            }
+            //Default selected state is 5 (TN)
+            stateListBox.SelectedIndex = DEFAULT_STATE;
+            //Initialize the form:
+            ClearForm();
+        }
+        private void calcSaleButton_Click(object sender, EventArgs e)
+        {
+            //Declare local variables:
+            decimal decSale = 0m, decDiscount = 0m, decTax = 0m, decTotal = 0m;
+            bool blnPriceOK;
+            string strState;
+            //Get data from form and convert data types as appropriate
+            strName = nameBox.Text;
+            blnPriceOK = decimal.TryParse(priceBox.Text, out decSale);
+            strState = stateListBox.Text;
+            //Validate vehicle price
+            if (blnPriceOK)
+            {
+                //calculate discount
+                decDiscount = DetermineDiscount(decSale);
+                //calculate sales tax:
+                decTax = DetermineTax(strState, decSale, decDiscount);
+                //calculate sale amount net of discount and sales tax:
+                decTotal = (decSale - decDiscount) + decTax;
+                //create and display output
+                //MessageBox.Show(decSale.ToString("c2"));
+                HandleOutput(decSale, decDiscount, decTax, decTotal);
+            }
+            else
+            {
+                //Display a popup containg the error message, reset focus, and select bad entry:
+                MessageBox.Show(ERR_MESSAGE, ERR_TITLE);
+                priceBox.Focus();
+                priceBox.SelectAll();
+            }
+        }
+ 
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            //Initialize the form:
+            ClearForm();
+        }
+        private decimal DetermineDiscount(decimal decSale)
+        {
+            decimal discountAmount = 0m;
+            int i = 0;
+            foreach (decimal breakpoint in BRACKET)
+            {
+                if (decSale < breakpoint)
+                {
+                    discountAmount = decSale * DISCOUNT_RATE[i];
+                    break;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+           return discountAmount;
+        }
+        private decimal DetermineTax(string selectedState, decimal decSale, decimal discountAmount)
+        {
+            //declare local variables:
+            decimal taxRate = 0m, taxAmount = 0m;
+            int i = 0;
+            foreach(string state in STATE)
+            {
+                if (state == selectedState)
+                {
+                    //Determine sales tax rate based upon state:
+                    taxRate = TAX_RATE[i];
+                    //Calculate tax
+                    taxAmount = taxRate * (decSale - discountAmount);
+                    break;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return taxAmount;
+        }
+        private void HandleOutput(decimal decSale, decimal decDiscount, decimal decTax, decimal decTotal)
+        {
+            //Declare local variables:
+            string strSale, strTotal, strDiscount, strTax, strOutputMsg;
+            //Create and format text for output:
+            strSale = decSale.ToString("c2");
+            strDiscount = decDiscount.ToString("c2");
+            strTax = decTax.ToString("c2");
+            strTotal = decTotal.ToString("c2");
+            //Generate block of text for primary output message:
+            strOutputMsg = strName + ", thanks for your purchase of " + strSale + ". The total amount of "
+                    + strTotal + " has been billed to your account.";
+            //strOutputMsg += 
+            //Display appropriate results back to form:
+            discountLabel.Text = strDiscount;
+            taxLabel.Text = strTax;
+            netPriceLabel.Text = strTotal;
+            resultSummaryLabel.Text = strOutputMsg;
+        }
+        private void ClearForm()
+        {
+            //Assign empty strings to text properties for all operational controls:
+            //nameBox.Clear();
+            nameBox.Text = String.Empty;
+            //priceBox.Clear();
+            priceBox.Text = String.Empty;
+            //discountLabel.Visible = false;
+            discountLabel.Text = String.Empty;
+            //taxLabel.Visible = false;
+            taxLabel.Text = String.Empty;
+            //netPriceLabel.Visible = false;
+            netPriceLabel.Text = String.Empty;
+            //resultSummaryLabel.Visible = false;
+            resultSummaryLabel.Text = String.Empty;
+            //Select default items for state drop down list:
+            stateListBox.SelectedIndex = 5;
+        }
+    }
+}
