@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace bmiCalculator2018a1_proj
+{
+    public partial class BMIForm : Form
+    {
+        public BMIForm()
+        {
+            InitializeComponent();
+        }
+
+        private void calcButton_Click(object sender, EventArgs e)
+        {
+            double dblFactor = 703;
+            double dblCutoff = 25;
+            string strGoodMessage = "You are in good shape!";
+            string strBadMessage = "You weigh too much.";
+            double dblHeight, dblWeight, dblBMI;
+            string strMessage;
+            double.TryParse(heightBox.Text, out dblHeight);
+            double.TryParse(weightBox.Text, out dblWeight);
+            dblBMI = dblFactor * (dblWeight / (dblHeight * dblHeight));
+            if (dblBMI <= dblCutoff)
+            {
+                strMessage = strGoodMessage;
+            }
+            else
+            {
+                strMessage = strBadMessage;
+            }
+            bmiLabel.Text = dblBMI.ToString("0.0");
+            commentLabel.Text = strMessage;
+        }
+    }
+}
