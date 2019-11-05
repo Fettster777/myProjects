@@ -1,0 +1,541 @@
+#Chris Salehi
+
+#Alfonso Ramirez
+
+#Group 8
+
+#name code
+#nano pilab6v2.py
+#begin writing code and initalize GPIO
+
+import RPi.GPIO as GPIO
+
+import time
+
+import random
+
+#use BCM
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setwarnings(False)
+
+#Setup GPIO pins for LEDs
+
+GPIO.setup(13, GPIO.OUT)
+
+#Green LED is GPIO13
+
+GPIO.setup(19, GPIO.OUT)
+
+#Red LED is GPIO19
+
+GPIO.setup(26, GPIO.OUT)
+
+#Yellow LED is GPIO26
+
+#Get Input of GRY
+
+orderBlink = raw_input("Please enter any combination of G, R, Y. example GRY:  ")
+
+#Select number of blinks for each LED color and how long each color LED will remain on between blinks
+
+numGreenTimes = random.randint(1,10)
+
+blinkGreenSpeed = random.randint(1,5)
+
+numGreen = int(numGreenTimes)
+
+speedGreen = float(blinkGreenSpeed)
+
+numRedTimes = random.randint(1,10)
+
+blinkRedSpeed = random.randint(1,5)
+
+numRed = int(numRedTimes)
+
+speedRed = float(blinkRedSpeed)
+
+numYellowTimes = random.randint(1,10)
+
+blinkYellowSpeed = random.randint(1,5)
+
+numYellow = int(numYellowTimes)
+
+speedYellow = float(blinkYellowSpeed)
+
+totalBlinks = numGreen + numRed + numYellow
+
+#define variables 
+
+i = 0
+
+tempGreen = 0
+
+tempYellow = 0
+
+tempRed = 0
+
+totalTimeGreen = 0
+
+totalTimeRed = 0
+
+totalTimeYellow = 0
+
+file = open("pilab6dump.txt","w")
+
+#run while loop which determines blinks for each LED based on input
+
+if orderBlink == "GRY":
+
+    while i < totalBlinks:
+
+        if tempGreen < numGreen:
+
+                print "Green LED on"
+
+                GPIO.output(13,GPIO.HIGH)
+
+                time.sleep(speedGreen)
+
+                print "Green LED off"
+
+                GPIO.output(13,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempGreen += 1
+
+		totalTimeGreen = totalTimeGreen + speedGreen
+
+                print "Number of Green Blinks is " + str(tempGreen) + " times"
+
+                file.write("Number of Green Blinks is " + str(tempGreen) + " times" + "\n")
+
+        if tempRed < numRed:
+
+                print "Red LED on"
+
+                GPIO.output(19,GPIO.HIGH)
+
+                time.sleep(speedRed)
+
+                print "Red LED off"
+
+                GPIO.output(19,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempRed += 1
+
+		totalTimeRed = totalTimeRed + speedRed
+
+                print "Number of Red Blinks is " + str(tempRed) + " times"
+
+                file.write("Number of Red Blinks is " + str(tempRed) + " times" + "\n")
+
+        if tempYellow < numYellow:
+
+                print "Yellow LED on"
+
+                GPIO.output(26,GPIO.HIGH)
+
+                time.sleep(speedYellow)
+
+                print "Yellow LED off"
+
+                GPIO.output(26,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempYellow += 1
+
+		totalTimeYellow = totalTimeYellow + speedYellow
+
+                print "Number of Yellow Blinks is " + str(tempYellow) + " times"
+
+                file.write("Number of Yellow Blinks is " + str(tempYellow) + " times" + "\n")
+
+        i += 1 
+
+if orderBlink == "GYR":
+
+    while i < totalBlinks:
+
+        if tempGreen < numGreen:
+
+                print "Green LED on"
+
+                GPIO.output(13,GPIO.HIGH)
+
+                time.sleep(speedGreen)
+
+                print "Green LED off"
+
+                GPIO.output(13,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempGreen += 1
+
+		totalTimeGreen = totalTimeGreen + speedGreen
+
+                print "Number of Green Blinks is " + str(tempGreen) + " times"
+
+                file.write("Number of Green Blinks is " + str(tempGreen) + " times" + "\n")
+
+        if tempYellow < numYellow:
+
+                print "Yellow LED on"
+
+                GPIO.output(26,GPIO.HIGH)
+
+                time.sleep(speedYellow)
+
+                print "Yellow LED off"
+
+                GPIO.output(26,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempYellow += 1
+
+		totalTimeYellow = totalTimeYellow + speedYellow
+
+                print "Number of Yellow Blinks is " + str(tempYellow) + " times"
+
+                file.write("Number of Yellow  Blinks is " + str(tempYellow) + " times" + "\n")
+		
+        if tempRed < numRed:
+
+                print "Red LED on"
+
+                GPIO.output(19,GPIO.HIGH)
+
+                time.sleep(speedRed)
+
+                print "Red LED off"
+
+                GPIO.output(19,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempRed += 1      
+
+		totalTimeRed = totalTimeRed + speedRed
+
+                print "Number of Red Blinks is " + str(tempRed) + " times"
+
+                file.write("Number of Red Blinks is " + str(tempRed) + " times" + "\n")
+
+        i += 1 
+
+if orderBlink == "RGY":
+
+    while i < totalBlinks:
+
+        if tempRed < numRed:
+
+                print "Red LED on"
+
+                GPIO.output(19,GPIO.HIGH)
+
+                time.sleep(speedRed)
+
+                print "Red LED off"
+
+                GPIO.output(19,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempRed += 1  
+
+		totalTimeRed = totalTimeRed + speedRed
+
+                print "Number of Red Blinks is " + str(tempRed) + " times"
+
+                file.write("Number of Red Blinks is " + str(tempRed) + " times" + "\n")
+
+        if tempGreen < numGreen:
+
+                print "Green LED on"
+
+                GPIO.output(13,GPIO.HIGH)
+
+                time.sleep(speedGreen)
+
+                print "Green LED off"
+
+                GPIO.output(13,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempGreen += 1
+
+		totalTimeGreen = totalTimeGreen + speedGreen
+
+                print "Number of Green Blinks is " + str(tempGreen) + " times"                
+
+                file.write("Number of Green Blinks is " + str(tempGreen) + " times" + "\n")
+
+        if tempYellow < numYellow:
+
+                print "Yellow LED on"
+
+                GPIO.output(26,GPIO.HIGH)
+
+                time.sleep(speedYellow)
+
+                print "Yellow LED off"
+
+                GPIO.output(26,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempYellow += 1            
+
+		totalTimeYellow = totalTimeYellow + speedYellow
+
+                print "Number of Yellow Blinks is " + str(tempYellow) + " times"
+
+                file.write("Number of Yellow Blinks is " + str(tempYellow) + " times" + "\n")
+
+        i += 1 
+
+if orderBlink == "RYG":
+
+    while i < totalBlinks:
+
+        if tempRed < numRed:
+
+                print "Red LED on"
+
+                GPIO.output(19,GPIO.HIGH)
+
+                time.sleep(speedRed)
+
+                print "Red LED off"
+
+                GPIO.output(19,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempRed += 1  
+
+		totalTimeRed = totalTimeRed + speedRed
+
+                print "Number of Red Blinks is " + str(tempRed) + " times"
+
+                file.write("Number of Red Blinks is " + str(tempRed) + " times" + "\n")
+        if tempYellow < numYellow:
+
+                print "Yellow LED on"
+
+                GPIO.output(26,GPIO.HIGH)
+
+                time.sleep(speedYellow)
+
+                print "Yellow LED off"
+
+                GPIO.output(26,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempYellow += 1 
+
+		totalTimeYellow = totalTimeYellow + speedYellow
+
+                
+                print "Number of Yellow Blinks is " + str(tempYellow) + " times"
+                
+                file.write("Number of Yellow Blinks is " + str(tempYellow) + " times" + "\n")
+
+        if tempGreen < numGreen:
+
+                print "Green LED on"
+
+                GPIO.output(13,GPIO.HIGH)
+
+                time.sleep(speedGreen)
+
+                print "Green LED off"
+
+                GPIO.output(13,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempGreen += 1            
+
+		totalTimeGreen = totalTimeGreen + speedGreen
+
+                print "Number of Green Blinks is " + str(tempGreen) + " times"
+		
+                file.write("Number of Green Blinks is " + str(tempGreen) + " times" + "\n")
+
+        i += 1 
+
+if orderBlink == "YRG":
+
+    while i < totalBlinks:
+
+        if tempYellow < numYellow:
+
+                print "Yellow LED on"
+
+                GPIO.output(26,GPIO.HIGH)
+
+                time.sleep(speedYellow)
+
+                print "Yellow LED off"
+
+                GPIO.output(26,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempYellow += 1 
+
+		totalTimeYellow = totalTimeYellow + speedYellow
+
+                print "Number of Yellow Blinks is " + str(tempYellow) + " times"
+
+                file.write("Number of Yellow Blinks is " + str(tempYellow) + " times" + "\n")
+
+        if tempRed < numRed:
+
+                print "Red LED on"
+
+                GPIO.output(19,GPIO.HIGH)
+
+                time.sleep(speedRed)
+
+                print "Red LED off"
+
+                GPIO.output(19,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempRed += 1        
+
+		totalTimeRed = totalTimeRed + speedRed
+
+                print "Number of Red Blinks is " + str(tempRed) + " times"
+
+                file.write("Number of Red Blinks is " + str(tempRed) + " times" + "\n")
+
+        if tempGreen < numGreen:
+
+                print "Green LED on"
+
+                GPIO.output(13,GPIO.HIGH)
+
+                time.sleep(speedGreen)
+
+                print "Green LED off"
+
+                GPIO.output(13,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempGreen += 1            
+
+		totalTimeGreen = totalTimeGreen + speedGreen
+
+                print "Number of Green Blinks is " + str(tempGreen) + " times"
+	
+                file.write("Number of Green Blinks is " + str(tempGreen) + " times" + "\n")
+
+        i += 1 
+
+if orderBlink == "YGR":
+
+    while i < totalBlinks:
+
+        if tempYellow < numYellow:
+
+                print "Yellow LED on"
+
+                GPIO.output(26,GPIO.HIGH)
+
+                time.sleep(speedYellow)
+
+                print "Yellow LED off"
+
+                GPIO.output(26,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempYellow += 1 
+
+		totalTimeYellow = totalTimeYellow + speedYellow
+
+                print "Number of Yellow Blinks is " + str(tempYellow) + " times"
+
+                file.write("Number of Yellow  Blinks is " + str(tempYellow) + " times" + "\n")
+
+        if tempGreen < numGreen:
+
+                print "Green LED on"
+
+                GPIO.output(13,GPIO.HIGH)
+
+                time.sleep(speedGreen)
+
+                print "Green LED off"
+
+                GPIO.output(13,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempGreen += 1  
+
+		totalTimeGreen = totalTimeGreen + speedGreen
+
+                print "Number of Green Blinks is " + str(tempGreen) + " times"
+
+                file.write("Number of Green Blinks is " + str(tempGreen) + " times" + "\n")
+
+        if tempRed < numRed:
+
+                print "Red LED on"
+
+                GPIO.output(19,GPIO.HIGH)
+
+                time.sleep(speedRed)
+
+                print "Red LED off"
+
+                GPIO.output(19,GPIO.LOW)
+
+                time.sleep(1)
+
+                tempRed += 1           
+
+		totalTimeRed = totalTimeRed + speedRed
+
+                print "Number of Red Blinks is " + str(tempRed) + " times"
+
+                file.write("Number of Red Blinks is " + str(tempRed) + " times" + "\n")
+
+        i += 1 
+
+#print total time on to screen and to file
+
+print "Total time for Green LED is " + str(totalTimeGreen)
+
+file.write("Total time for Green LED is " + str(totalTimeGreen) + "\n")
+
+print "Total time for Red LED is " + str(totalTimeRed)
+
+file.write("Total time for Red LED is " + str(totalTimeRed) + "\n")
+
+print "Total time for Yellow LED is " + str(totalTimeYellow)
+
+file.write("Total time for Yellow LED is " + str(totalTimeYellow) + "\n")
+
+file.close()
+
+GPIO.cleanup()
+
+#run code
+
+#sudo python pilab6v2.py
